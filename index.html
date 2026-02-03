@@ -715,9 +715,7 @@
             </div>
             <div class="portfolio-grid">
                 <div class="portfolio-item" style="max-width: 800px; margin: 0 auto;">
-                    <div class="portfolio-image" style="background: none; padding: 0; height: 400px; overflow: hidden; border-radius: 12px 12px 0 0;">
-                        <img src="hickam-screenshot.png" alt="Hickam Air Force Base Screenshot" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-secondary);font-size:1.2rem;\'>🖼️ Image: hickam-screenshot.png</div>'">
-                    </div>
+                    <div class="portfolio-image">✈️</div>
                     <div class="portfolio-content">
                         <h3>Hickam Air Force Base</h3>
                         <p>My main project as Head Developer - a detailed military air force base with realistic buildings, runways, hangars, and authentic base infrastructure. Features military roleplay elements with attention to detail and optimization.</p>
@@ -729,6 +727,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="https://www.roblox.com/games/15701457046/Hickam-Air-Force-Base" target="_blank" class="btn btn-primary" style="display: inline-block;">
+                    🎮 Play Hickam Air Force Base on Roblox
+                </a>
             </div>
         </div>
     </section>
@@ -795,10 +799,10 @@
                     <h3>Roblox</h3>
                     <p>@boetson120fps</p>
                 </a>
-                <a href="mailto:boetsonfps041@gmail.com" class="contact-card">
+                <a href="/cdn-cgi/l/email-protection#5f3d303a2b2c3031392f2c6f6b6e1f38323e3633713c3032" class="contact-card">
                     <div class="contact-icon">📧</div>
                     <h3>Email</h3>
-                    <p>boetsonfps041@gmail.com</p>
+                    <p><span class="__cf_email__" data-cfemail="264449435255494840565516121766414b474f4a0845494b">[email&#160;protected]</span></p>
                 </a>
             </div>
         </div>
@@ -809,7 +813,7 @@
         <p>&copy; 2025 boetson120fps. All rights reserved.</p>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Mobile menu toggle
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
@@ -848,10 +852,3 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
