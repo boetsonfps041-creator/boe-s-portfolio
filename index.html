@@ -31,7 +31,7 @@
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* Animated background grid */
@@ -103,6 +103,10 @@
             font-size: 0.85rem;
         }
 
+        .nav-links a.active {
+            color: var(--accent-primary);
+        }
+
         .nav-links a::after {
             content: '';
             position: absolute;
@@ -118,17 +122,23 @@
             color: var(--accent-primary);
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
             width: 100%;
         }
 
         /* Sections */
         section {
             min-height: 100vh;
+            height: 100vh;
             padding: 8rem 3rem 4rem;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             z-index: 1;
             display: none;
+            overflow-y: auto;
         }
 
         section.active {
@@ -678,7 +688,7 @@
         <div class="logo">B120</div>
         <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
+            <li><a href="#" onclick="showPage('home'); return false;" class="active">Home</a></li>
             <li><a href="#" onclick="showPage('experience'); return false;">Experience</a></li>
             <li><a href="#" onclick="showPage('portfolio'); return false;">Portfolio</a></li>
             <li><a href="#" onclick="showPage('skills'); return false;">Skills</a></li>
@@ -888,29 +898,6 @@
             observer.observe(bar);
         });
 
-        // Add active state to nav links based on scroll position
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-links a');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.style.color = '';
-                const href = link.getAttribute('onclick');
-                if (href && href.includes(current)) {
-                    link.style.color = 'var(--accent-primary)';
-                }
-            });
-        });
-
         // Page switching functionality
         function showPage(pageId) {
             // Hide all sections
@@ -919,22 +906,24 @@
             });
             
             // Show selected section
-            document.getElementById(pageId).classList.add('active');
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // Reset scroll position of the section
+                targetSection.scrollTop = 0;
+            }
             
-            // Update active nav link
+            // Update active nav link based on which page we're on
             document.querySelectorAll('.nav-links a').forEach(link => {
-                link.style.color = '';
+                link.classList.remove('active');
                 const onclick = link.getAttribute('onclick');
-                if (onclick && onclick.includes(pageId)) {
-                    link.style.color = 'var(--accent-primary)';
+                if (onclick && onclick.includes("'" + pageId + "'")) {
+                    link.classList.add('active');
                 }
             });
             
             // Close mobile menu if open
             document.getElementById('navLinks').classList.remove('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
         }
 
         // Toggle military RP experience details
@@ -951,7 +940,7 @@
         window.addEventListener('load', () => {
             const homeLink = document.querySelector('.nav-links a[onclick*="home"]');
             if (homeLink) {
-                homeLink.style.color = 'var(--accent-primary)';
+                homeLink.classList.add('active');
             }
         });
     </script>
