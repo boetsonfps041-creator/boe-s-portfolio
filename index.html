@@ -581,40 +581,56 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             opacity: 0;
-            height: 0;
+            max-height: 0;
             margin: 0;
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        margin 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
 
         .skill-card:hover p {
             opacity: 1;
-            height: auto;
-            margin-bottom: 0;
+            max-height: 100px;
+            margin-top: 1rem;
+            padding: 0;
         }
 
         .skill-bar {
-            margin-top: 1.5rem;
+            margin-top: 0;
             height: 8px;
             background: var(--border-color);
             border-radius: 4px;
             overflow: hidden;
             position: relative;
             opacity: 0;
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+                        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+                        margin 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
         }
 
         .skill-card:hover .skill-bar {
             opacity: 1;
+            transform: scaleX(1);
+            margin-top: 1.5rem;
         }
 
         .skill-progress {
             height: 100%;
             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 4px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
             position: relative;
             overflow: hidden;
+            width: 0 !important;
+        }
+
+        .skill-card:hover .skill-progress {
+            width: var(--progress-width) !important;
         }
 
         .skill-progress::after {
@@ -956,7 +972,7 @@
                     <h3>Building</h3>
                     <p>Really good at making realistic military stuff and detailed buildings in Roblox Studio</p>
                     <div class="skill-bar">
-                        <div class="skill-progress" style="width: 90%"></div>
+                        <div class="skill-progress" style="--progress-width: 90%"></div>
                     </div>
                 </div>
                 <div class="skill-card">
@@ -964,7 +980,7 @@
                     <h3>Scripting</h3>
                     <p>Know my way around Lua for basic game mechanics and making things interactive</p>
                     <div class="skill-bar">
-                        <div class="skill-progress" style="width: 60%"></div>
+                        <div class="skill-progress" style="--progress-width: 60%"></div>
                     </div>
                 </div>
                 <div class="skill-card">
@@ -972,7 +988,7 @@
                     <h3>Optimization</h3>
                     <p>Making sure games run smooth even with complex builds on any device</p>
                     <div class="skill-bar">
-                        <div class="skill-progress" style="width: 80%"></div>
+                        <div class="skill-progress" style="--progress-width: 80%"></div>
                     </div>
                 </div>
                 <div class="skill-card">
@@ -980,7 +996,7 @@
                     <h3>Animation</h3>
                     <p>Still learning but getting better at making animations for players and environments</p>
                     <div class="skill-bar">
-                        <div class="skill-progress" style="width: 35%"></div>
+                        <div class="skill-progress" style="--progress-width: 35%"></div>
                     </div>
                 </div>
             </div>
