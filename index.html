@@ -532,6 +532,7 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .skill-card::before {
@@ -547,12 +548,14 @@
             border-radius: 50%;
         }
 
-        .skill-card:hover::before {
+        .skill-card:hover::before,
+        .skill-card.active::before {
             width: 400px;
             height: 400px;
         }
 
-        .skill-card:hover {
+        .skill-card:hover,
+        .skill-card.active {
             border-color: var(--accent-primary);
             box-shadow: 0 15px 50px rgba(0, 255, 136, 0.2);
             z-index: 10;
@@ -568,7 +571,8 @@
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .skill-card:hover .skill-icon {
+        .skill-card:hover .skill-icon,
+        .skill-card.active .skill-icon {
             transform: scale(1.1) rotate(5deg);
         }
 
@@ -591,7 +595,8 @@
             overflow: hidden;
         }
 
-        .skill-card:hover p {
+        .skill-card:hover p,
+        .skill-card.active p {
             opacity: 1;
             max-height: 100px;
             margin-top: 1rem;
@@ -613,7 +618,8 @@
                         margin 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
         }
 
-        .skill-card:hover .skill-bar {
+        .skill-card:hover .skill-bar,
+        .skill-card.active .skill-bar {
             opacity: 1;
             transform: scaleX(1);
             margin-top: 1.5rem;
@@ -629,7 +635,8 @@
             width: 0 !important;
         }
 
-        .skill-card:hover .skill-progress {
+        .skill-card:hover .skill-progress,
+        .skill-card.active .skill-progress {
             width: var(--progress-width) !important;
         }
 
@@ -1066,6 +1073,23 @@
             element.classList.toggle('expanded');
         }
 
+
+        // Mobile support for skill cards - toggle on click/tap
+        document.addEventListener('DOMContentLoaded', function() {
+            const skillCards = document.querySelectorAll('.skill-card');
+            
+            skillCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Check if device supports touch (mobile)
+                    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                        e.preventDefault();
+                        
+                        // Toggle active class on clicked card
+                        this.classList.toggle('active');
+                    }
+                });
+            });
+        });
         // Show project details (placeholder for future implementation)
 
         // Add active state to nav links based on scroll position
