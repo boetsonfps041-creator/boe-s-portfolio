@@ -1088,8 +1088,18 @@
                         e.preventDefault();
                         e.stopPropagation();
                         
-                        // Toggle active class on clicked card
-                        this.classList.toggle('active');
+                        // Check if this card is already active
+                        const isActive = this.classList.contains('active');
+                        
+                        // Close all cards first
+                        skillCards.forEach(otherCard => {
+                            otherCard.classList.remove('active');
+                        });
+                        
+                        // If this card wasn't active, open it
+                        if (!isActive) {
+                            this.classList.add('active');
+                        }
                     });
                 });
             }
