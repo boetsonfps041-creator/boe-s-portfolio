@@ -23,7 +23,7 @@
         }
 
         html {
-            scroll-behavior: auto;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -31,7 +31,7 @@
             background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         /* Animated background grid */
@@ -130,19 +130,9 @@
         /* Sections */
         section {
             min-height: 100vh;
-            height: 100vh;
             padding: 8rem 3rem 4rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            position: relative;
             z-index: 1;
-            display: none;
-            overflow-y: auto;
-        }
-
-        section.active {
-            display: block;
         }
 
         .container {
@@ -467,8 +457,8 @@
 
         .skill-card:hover {
             border-color: var(--accent-primary);
-            transform: scale(1.05);
             box-shadow: 0 10px 40px rgba(0, 255, 136, 0.15);
+            z-index: 10;
         }
 
         .skill-icon {
@@ -688,16 +678,16 @@
         <div class="logo">B120</div>
         <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="showPage('home'); return false;" class="active">Home</a></li>
-            <li><a href="#" onclick="showPage('experience'); return false;">Experience</a></li>
-            <li><a href="#" onclick="showPage('portfolio'); return false;">Portfolio</a></li>
-            <li><a href="#" onclick="showPage('skills'); return false;">Skills</a></li>
-            <li><a href="#" onclick="showPage('contact'); return false;">Contact</a></li>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="active">
+    <section id="home">
         <div class="container">
             <div class="hero-content">
                 <h1>Hi, I'm boetson120fps</h1>
@@ -706,8 +696,8 @@
                     I build cool stuff in Roblox Studio. Mostly focused on making realistic military bases and optimizing games so they run smooth.
                 </p>
                 <div class="cta-buttons">
-                    <a href="#" onclick="showPage('portfolio'); return false;" class="btn btn-primary">Check Out My Work</a>
-                    <a href="#" onclick="showPage('contact'); return false;" class="btn btn-secondary">Hit Me Up</a>
+                    <a href="#portfolio" class="btn btn-primary">Check Out My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Hit Me Up</a>
                 </div>
             </div>
             <div class="scroll-indicator"></div>
@@ -898,33 +888,38 @@
             observer.observe(bar);
         });
 
-        // Page switching functionality
-        function showPage(pageId) {
-            // Hide all sections
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
+        // Toggle military RP experience details
+        function toggleDetails(element) {
+            element.classList.toggle('expanded');
+        }
+
+        // Show project details (placeholder for future implementation)
+        function showProjectDetails() {
+            alert('Project gallery coming soon! For now, check out the game on Roblox using the button below.');
+        }
+
+        // Add active state to nav links based on scroll position
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
             });
-            
-            // Show selected section
-            const targetSection = document.getElementById(pageId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                // Reset scroll position of the section
-                targetSection.scrollTop = 0;
-            }
-            
-            // Update active nav link based on which page we're on
-            document.querySelectorAll('.nav-links a').forEach(link => {
+
+            navLinks.forEach(link => {
                 link.classList.remove('active');
-                const onclick = link.getAttribute('onclick');
-                if (onclick && onclick.includes("'" + pageId + "'")) {
+                if (link.getAttribute('href') === '#' + current) {
                     link.classList.add('active');
                 }
             });
-            
-            // Close mobile menu if open
-            document.getElementById('navLinks').classList.remove('active');
-        }
+        });
+
 
         // Toggle military RP experience details
         function toggleDetails(element) {
@@ -938,7 +933,7 @@
 
         // Set home nav link as active on load
         window.addEventListener('load', () => {
-            const homeLink = document.querySelector('.nav-links a[onclick*="home"]');
+            const homeLink = document.querySelector('.nav-links a[href="#home"]');
             if (homeLink) {
                 homeLink.classList.add('active');
             }
