@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>boetson120fps — Roblox developer & world builder</title>
-<meta name="description" content="boetson120fps is a Roblox developer and builder — detailed environments, working systems, and the optimization to keep games running smooth. Head Developer on Hickam Air Force Base.">
+<meta name="description" content="boetson120fps is a Roblox developer and builder — detailed environments, working systems, and the optimization to keep games running smooth. Head Developer on the United States Air Force Academy.">
 <meta property="og:title" content="boetson120fps — Roblox developer & world builder">
 <meta property="og:description" content="Roblox developer and builder. Detailed worlds, working systems, smooth performance.">
 <meta property="og:type" content="website">
@@ -26,12 +26,11 @@
   --text-dim:#aeafa2;
   --text-faint:#83847a;
   --lime:#c2f24a;
-  --lime-dim:#a6d43a;
   --lime-ink:#16180b;
   --maxw:1180px;
   --r-lg:20px; --r-md:14px; --r-sm:10px;
   --ease:cubic-bezier(.16,1,.3,1);
-  --eo:cubic-bezier(.22,1,.36,1);
+  --ease2:cubic-bezier(.22,1,.36,1);
   --shadow:0 22px 44px -24px rgba(0,0,0,.85), 0 4px 12px -6px rgba(0,0,0,.5);
 }
 
@@ -41,15 +40,14 @@ body{
   background:var(--ink);color:var(--text);line-height:1.6;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;min-height:100dvh;
 }
-body.cursor-on{cursor:none}
-body.cursor-on a,body.cursor-on button,body.cursor-on [data-mag],body.cursor-on .chip{cursor:none}
+body.cursor-on,body.cursor-on *{cursor:none!important}
 
-/* Blueprint grid — solid hairlines, not a colour wash */
-.grid-bg{position:fixed;inset:-60px;z-index:0;pointer-events:none;will-change:transform;
+/* Blueprint grid — solid hairlines, no colour wash */
+.grid-bg{position:fixed;inset:-60px;z-index:0;pointer-events:none;will-change:transform;opacity:.85;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath d='M44 0H0V44' fill='none' stroke='rgba(255,255,255,0.045)' stroke-width='1'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cpath d='M220 0H0V220' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size:44px 44px,220px 220px;opacity:.85}
+  background-size:44px 44px,220px 220px}
 
 ::selection{background:var(--lime);color:var(--lime-ink)}
 a{color:inherit;text-decoration:none}
@@ -60,17 +58,20 @@ main{position:relative;z-index:1}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 h1,h2,h3{font-family:'Bricolage Grotesque','Hanken Grotesk',sans-serif;line-height:1.0;letter-spacing:-.025em;font-weight:800}
 
-/* Custom cursor */
+/* ---- Custom cursor ---- */
 .cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s}
 body.cursor-on .cursor{opacity:1}
-.cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid #fff;border-radius:50%;mix-blend-mode:difference;will-change:transform;transition:background .25s}
-.cursor-ring.lg{background:rgba(255,255,255,.12)}
-.cursor-dot{position:fixed;width:6px;height:6px;background:var(--lime);border-radius:50%;transform:translate(-50%,-50%)}
+.cursor-ring{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid rgba(255,255,255,.7);border-radius:50%;
+  display:grid;place-items:center;will-change:transform;transition:background .25s,border-color .25s}
+.cursor-ring.label{background:var(--lime);border-color:var(--lime)}
+.cursor-lbl{font:700 9px/1 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--lime-ink);opacity:0;transition:opacity .2s;text-transform:uppercase}
+.cursor-ring.label .cursor-lbl{opacity:1}
+.cursor-dot{position:fixed;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--lime);border-radius:50%;will-change:transform}
 
-/* Scroll progress rail */
+/* ---- Scroll progress ---- */
 .progress{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--lime);z-index:120}
 
-/* ---------------- Nav ---------------- */
+/* ---- Nav ---- */
 .nav{position:fixed;top:clamp(.7rem,2vw,1.15rem);left:50%;transform:translateX(-50%);z-index:100;width:min(1120px,calc(100% - 1.5rem))}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;
   background:rgba(18,19,17,.72);backdrop-filter:blur(16px);border:1px solid var(--line-2);
@@ -83,29 +84,29 @@ body.cursor-on .cursor{opacity:1}
 .nav-links a{position:relative;font-size:.88rem;font-weight:500;color:var(--text-dim);padding:.45rem .85rem;border-radius:8px;transition:color .25s var(--ease),background .25s var(--ease)}
 .nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
 .nav-links a.active{color:var(--lime)}
-.nav-links a.active::after{content:'';position:absolute;left:.85rem;right:.85rem;bottom:.24rem;height:2px;background:var(--lime);transform:scaleX(1);border-radius:2px}
-.nav-cta{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.86rem;color:var(--lime-ink);background:var(--lime);padding:.6rem 1.1rem;border-radius:10px;transition:transform .3s var(--eo),background .25s}
+.nav-links a.active::after{content:'';position:absolute;left:.85rem;right:.85rem;bottom:.24rem;height:2px;background:var(--lime);border-radius:2px}
+.nav-cta{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;font-size:.86rem;color:var(--lime-ink);background:var(--lime);padding:.6rem 1.1rem;border-radius:10px;transition:transform .3s var(--ease2),background .25s}
 .nav-cta:hover{background:#d2ff5e}
 .burger{display:none;width:42px;height:42px;border:1px solid var(--line-2);background:rgba(255,255,255,.04);border-radius:10px;cursor:pointer;position:relative}
-.burger span{position:absolute;left:11px;right:11px;height:2px;border-radius:2px;background:var(--text);transition:transform .4s var(--eo),opacity .25s}
+.burger span{position:absolute;left:11px;right:11px;height:2px;border-radius:2px;background:var(--text);transition:transform .4s var(--ease2),opacity .25s}
 .burger span:nth-child(1){top:15px}.burger span:nth-child(2){top:21px}.burger span:nth-child(3){top:27px}
 
 .overlay{position:fixed;inset:0;z-index:99;background:rgba(15,16,14,.94);backdrop-filter:blur(18px);
   display:flex;flex-direction:column;justify-content:center;gap:.25rem;padding:2rem 2.4rem;
-  opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .35s var(--ease),transform .45s var(--eo),visibility .35s}
+  opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .35s var(--ease),transform .45s var(--ease2),visibility .35s}
 .overlay.open{opacity:1;visibility:visible;transform:none}
-.overlay a{display:flex;align-items:baseline;gap:.9rem;font-family:'Bricolage Grotesque';font-size:2.1rem;font-weight:800;color:var(--text);padding:.4rem 0;opacity:0;transform:translateY(22px);transition:opacity .5s var(--ease),transform .55s var(--eo),color .2s}
+.overlay a{display:flex;align-items:baseline;gap:.9rem;font-family:'Bricolage Grotesque';font-size:2.1rem;font-weight:800;color:var(--text);padding:.4rem 0;opacity:0;transform:translateY(22px);transition:opacity .5s var(--ease),transform .55s var(--ease2),color .2s}
 .overlay a:hover{color:var(--lime)}
 .overlay.open a{opacity:1;transform:none}
 .overlay.open a:nth-child(1){transition-delay:.06s}.overlay.open a:nth-child(2){transition-delay:.12s}
 .overlay.open a:nth-child(3){transition-delay:.18s}.overlay.open a:nth-child(4){transition-delay:.24s}.overlay.open a:nth-child(5){transition-delay:.3s}
 .overlay a .n{font-family:'JetBrains Mono';font-size:.85rem;color:var(--lime);font-weight:500}
 
-/* ---------------- Buttons ---------------- */
-.btn{display:inline-flex;align-items:center;gap:.7rem;font-weight:700;font-size:.96rem;cursor:pointer;
+/* ---- Buttons ---- */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.7rem;font-weight:700;font-size:.96rem;cursor:pointer;
   padding:.7rem .8rem .7rem 1.35rem;border-radius:12px;border:1px solid transparent;
-  transition:transform .3s var(--eo),background .25s,color .25s,border-color .25s}
-.btn .ico{width:32px;height:32px;flex:0 0 auto;border-radius:8px;display:grid;place-items:center;transition:transform .35s var(--eo)}
+  transition:transform .3s var(--ease2),background .25s,color .25s,border-color .25s}
+.btn .ico{width:32px;height:32px;flex:0 0 auto;border-radius:8px;display:grid;place-items:center;transition:transform .35s var(--ease2)}
 .btn .ico svg{width:16px;height:16px}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--lime);color:var(--lime-ink)}
@@ -116,25 +117,33 @@ body.cursor-on .cursor{opacity:1}
 .btn-ghost .ico{background:rgba(255,255,255,.07)}
 .btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
 .btn-ghost:hover .ico{transform:translate(3px,-1px)}
+.ripple{position:absolute;border-radius:50%;background:rgba(0,0,0,.16);transform:scale(0);opacity:.6;pointer-events:none;animation:ripple .6s var(--ease) forwards}
+@keyframes ripple{to{transform:scale(1);opacity:0}}
 
-/* ---------------- Sections ---------------- */
+/* ---- Sections ---- */
 section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .s-head{max-width:640px;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
 .s-head .ix{font-family:'JetBrains Mono';font-size:.8rem;font-weight:500;color:var(--lime);letter-spacing:.1em}
-.s-head h2{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;margin-top:.7rem;text-wrap:balance}
+.s-head h2{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;margin-top:.7rem;text-wrap:balance;clip-path:inset(0 106% -12% -2%);transition:clip-path .9s var(--ease) .08s}
+.s-head.in h2{clip-path:inset(0 -4% -12% -2%)}
 .s-head p{color:var(--text-dim);margin-top:1rem;font-size:1.05rem;max-width:54ch}
 
-/* card base */
 .card{background:var(--panel);border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow)}
 
-/* ---------------- Hero ---------------- */
+/* ---- Ticker ---- */
+.ticker{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:.85rem 0;background:var(--ink-2)}
+.ticker-track{display:inline-flex;white-space:nowrap;will-change:transform}
+.ticker-track span{font-family:'JetBrains Mono';font-size:.82rem;letter-spacing:.06em;color:var(--text-faint);padding:0 1.1rem}
+.ticker-track span b{color:var(--lime);font-weight:500}
+
+/* ---- Hero ---- */
 #home{padding-top:clamp(8rem,15vw,11rem);perspective:1000px}
 .hero{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(2rem,5vw,4rem);align-items:center}
 .hero .tag{display:inline-flex;align-items:center;gap:.55rem;font-family:'JetBrains Mono';font-size:.76rem;font-weight:500;color:var(--text-dim);border:1px solid var(--line-2);border-radius:99px;padding:.35rem .8rem}
 .hero .tag i{width:7px;height:7px;border-radius:50%;background:var(--lime)}
 .hero h1{font-size:clamp(2.7rem,7.4vw,5.3rem);font-weight:800;margin-top:1.4rem}
 .hero h1 .u{position:relative;color:var(--lime);white-space:nowrap}
-.hero h1 .u::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:.09em;background:var(--lime);transform:scaleX(0);transform-origin:0 50%;animation:draw 1s var(--eo) .5s forwards}
+.hero h1 .u::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:.09em;background:var(--lime);transform:scaleX(0);transform-origin:0 50%;animation:draw 1s var(--ease2) .5s forwards}
 @keyframes draw{to{transform:scaleX(1)}}
 .hero .lead{color:var(--text-dim);font-size:clamp(1.05rem,1.8vw,1.2rem);margin-top:1.5rem;max-width:42ch}
 .hero .cta{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:2.2rem}
@@ -143,7 +152,6 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .hero .stat .num.lime{color:var(--lime)}
 .hero .stat .lbl{color:var(--text-faint);font-size:.82rem;font-weight:500}
 
-/* hero viewport */
 .stage{position:relative;min-height:430px;display:grid;place-items:center;perspective:1000px}
 .viewport{width:100%;max-width:410px;position:relative;z-index:2;transform-style:preserve-3d;transition:transform .4s var(--ease)}
 .viewport .card{padding:14px}
@@ -153,9 +161,9 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .vp-bar .co{margin-left:auto}
 .scene{position:relative;border-radius:var(--r-sm);overflow:hidden;aspect-ratio:16/11;border:1px solid var(--line)}
 .scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-.sel{position:absolute;width:32%;height:30%;left:16%;top:46%;border:1.5px dashed var(--lime);border-radius:4px}
+.sel{position:absolute;width:34%;height:30%;left:20%;top:40%;border:1.5px dashed var(--lime);border-radius:4px;animation:sel 5s var(--ease) infinite}
 .sel::before{content:'';position:absolute;width:7px;height:7px;background:var(--lime);border:1.5px solid var(--ink);left:-4px;top:-4px}
-.sel::after{content:'';position:absolute;width:7px;height:7px;background:var(--lime);border:1.5px solid var(--ink);right:-4px;bottom:-4px}
+@keyframes sel{0%,100%{transform:translate(0,0)}30%{transform:translate(38%,-14%)}60%{transform:translate(10%,26%)}}
 .vp-meta{display:flex;justify-content:space-between;align-items:flex-end;padding:.9rem .3rem .2rem}
 .vp-meta h3{font-size:1.15rem;font-weight:800}
 .vp-meta .mono{font-size:.68rem;color:var(--text-faint)}
@@ -172,7 +180,7 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .chip.grab .chip-in{animation-play-state:paused}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
 
-/* ---------------- Work ---------------- */
+/* ---- Work ---- */
 .feature{overflow:hidden;display:grid;grid-template-columns:1.02fr .98fr}
 .feature .visual{position:relative;min-height:380px;border-right:1px solid var(--line-2)}
 .feature .visual svg{position:absolute;inset:0;width:100%;height:100%}
@@ -194,7 +202,7 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .soon b{color:var(--text);font-weight:700;display:block;font-family:'Bricolage Grotesque'}
 .soon span{font-size:.9rem;color:var(--text-faint)}
 
-/* ---------------- Experience ---------------- */
+/* ---- Experience ---- */
 .exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:start}
 .exp-lead{padding:clamp(1.6rem,3vw,2.1rem)}
 .exp-lead .when{font-family:'JetBrains Mono';font-size:.74rem;color:var(--lime);display:inline-flex;align-items:center;gap:.5rem}
@@ -212,10 +220,10 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .rp-btn .idx{font-family:'JetBrains Mono';font-weight:700;font-size:.85rem;color:var(--lime)}
 .rp-btn .name{flex:1;font-family:'Bricolage Grotesque';font-weight:800;font-size:1.15rem}
 .rp-btn .chev{width:32px;height:32px;flex:0 0 auto;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--line-2);display:grid;place-items:center;transition:background .25s}
-.rp-btn .chev svg{width:15px;height:15px;transition:transform .4s var(--eo)}
+.rp-btn .chev svg{width:15px;height:15px;transition:transform .4s var(--ease2)}
 .rp[aria-expanded="true"] .chev{background:var(--lime);color:var(--lime-ink);border-color:var(--lime)}
 .rp[aria-expanded="true"] .chev svg{transform:rotate(90deg)}
-.rp-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--eo)}
+.rp-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease2)}
 .rp[aria-expanded="true"] .rp-panel{grid-template-rows:1fr}
 .rp-panel>.inner{overflow:hidden;min-height:0}
 .rp-panel ul{list-style:none;display:grid;gap:1rem;padding:0 1.4rem 1.4rem 3.1rem}
@@ -223,7 +231,7 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .rp-panel li b{display:block;font-family:'Bricolage Grotesque';font-weight:700;font-size:.98rem;color:var(--text);margin-bottom:.2rem}
 .rp-panel li b em{font-style:normal;color:var(--lime)}
 
-/* ---------------- Skills ---------------- */
+/* ---- Skills ---- */
 .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
 .skill{padding:clamp(1.5rem,3vw,2rem);transition:transform .35s var(--ease),border-color .25s}
 .skill:hover{border-color:var(--line-2)}
@@ -234,10 +242,10 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .skill .lvl{font-family:'JetBrains Mono';font-size:.68rem;font-weight:500;color:var(--text-faint)}
 .skill p{color:var(--text-dim);font-size:.94rem}
 .gauge{display:flex;gap:5px;margin-top:1.1rem}
-.gauge i{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);transform:scaleY(1)}
+.gauge i{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08)}
 .gauge i.on{background:var(--lime)}
 
-/* ---------------- Contact ---------------- */
+/* ---- Contact ---- */
 .comms{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
 .comm{display:flex;align-items:center;gap:1.1rem;padding:1.4rem 1.5rem;transition:transform .35s var(--ease),border-color .25s}
 .comm:hover{border-color:var(--lime)}
@@ -247,20 +255,20 @@ section{padding:clamp(5rem,11vw,8.5rem) 0;position:relative}
 .comm .t small{font-family:'JetBrains Mono';font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);display:block;margin-bottom:.25rem}
 .comm .t b{font-family:'Bricolage Grotesque';font-weight:800;font-size:1.18rem}
 .comm .t span{display:block;color:var(--text-dim);font-size:.85rem;margin-top:.1rem}
-.comm .arrow{margin-left:auto;color:var(--text-faint);transition:transform .4s var(--eo),color .25s}
+.comm .arrow{margin-left:auto;color:var(--text-faint);transition:transform .4s var(--ease2),color .25s}
 .comm .arrow svg{width:19px;height:19px}
 .comm:hover .arrow{color:var(--lime);transform:translate(4px,-4px)}
 .cta-band{margin-top:2.2rem;text-align:center}
 
-/* ---------------- Footer ---------------- */
+/* ---- Footer ---- */
 footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:2.4rem 0;margin-top:1rem}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 footer .brand span{font-size:.95rem}
 footer .c{color:var(--text-faint);font-size:.85rem;font-family:'JetBrains Mono'}
 footer .c b{color:var(--text-dim);font-weight:500}
 
-/* Reveal */
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .8s var(--eo)}
+/* ---- Reveal ---- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .8s var(--ease2)}
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
@@ -282,6 +290,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
+  .s-head h2{clip-path:none}
   .hero h1 .u::after{transform:scaleX(1)}
 }
 </style>
@@ -290,7 +299,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
 
 <div class="grid-bg" id="gridBg" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
-<div class="cursor" aria-hidden="true"><div class="cursor-ring" id="cRing"></div><div class="cursor-dot" id="cDot"></div></div>
+<div class="cursor" aria-hidden="true"><div class="cursor-dot" id="cDot"></div><div class="cursor-ring" id="cRing"><span class="cursor-lbl" id="cLbl"></span></div></div>
 
 <!-- NAV -->
 <header class="nav">
@@ -305,7 +314,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
     </nav>
-    <a href="#contact" class="nav-cta" data-mag>Get in touch</a>
+    <a href="#contact" class="nav-cta" data-mag data-cursor="say hi">Get in touch</a>
     <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="overlay"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -328,67 +337,70 @@ footer .c b{color:var(--text-dim);font-weight:500}
       <h1 class="reveal d1">I build Roblox <span class="u">worlds</span> worth staying in.</h1>
       <p class="lead reveal d2">Detailed environments, working systems, and the optimization to keep them running smooth on any device.</p>
       <div class="cta reveal d2">
-        <a href="#work" class="btn btn-primary" data-mag>See my work <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-        <a href="#contact" class="btn btn-ghost" data-mag>Get in touch <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+        <a href="#work" class="btn btn-primary" data-mag data-cursor="view">See my work <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+        <a href="#contact" class="btn btn-ghost" data-mag data-cursor="say hi">Get in touch <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
       </div>
       <div class="stats reveal d3">
-        <div class="stat"><div class="num lime">Head Dev</div><div class="lbl">Hickam Air Force Base</div></div>
+        <div class="stat"><div class="num lime">Head Dev</div><div class="lbl">Air Force Academy</div></div>
         <div class="stat"><div class="num">4+ yrs</div><div class="lbl">In the community</div></div>
         <div class="stat"><div class="num">All devices</div><div class="lbl">Runs smooth</div></div>
       </div>
     </div>
 
     <div class="stage reveal d2">
-      <div class="chip c1" data-drag><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg>Building</span></div>
-      <div class="chip c2" data-drag><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg>Luau</span></div>
-      <div class="chip c3" data-drag><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>Optimization</span></div>
+      <div class="chip c1" data-drag data-cursor="drag"><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg>Building</span></div>
+      <div class="chip c2" data-drag data-cursor="drag"><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg>Luau</span></div>
+      <div class="chip c3" data-drag data-cursor="drag"><span class="chip-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>Optimization</span></div>
 
-      <div class="viewport" data-tilt>
+      <div class="viewport" data-tilt data-cursor="build">
         <div class="card">
-          <div class="vp-bar"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="co">x 128 · y 0 · z 64</span></div>
+          <div class="vp-bar"><span class="d on"></span><span class="d"></span><span class="d"></span><span class="co" id="coord">x 128 · y 0 · z 64</span></div>
           <div class="scene">
             <svg viewBox="0 0 400 275" preserveAspectRatio="xMidYMid slice" aria-label="Flat illustration of an airbase in build view">
               <rect width="400" height="275" fill="#1b1d16"/>
               <rect y="150" width="400" height="125" fill="#141510"/>
               <circle cx="312" cy="92" r="34" fill="#c2f24a"/>
               <g fill="#f2f3ec"><circle cx="70" cy="46" r="1.6"/><circle cx="128" cy="34" r="1.1"/><circle cx="196" cy="58" r="1.3"/><circle cx="96" cy="92" r="1"/></g>
-              <!-- runway perspective -->
               <path d="M150 275 L300 275 L250 155 L200 155 Z" fill="#20221a"/>
               <path d="M225 155 L225 275" stroke="#c2f24a" stroke-width="2.4" stroke-dasharray="10 10"/>
-              <!-- taxiway -->
               <path d="M250 190 L360 220" stroke="#f2f3ec" stroke-width="1.6" opacity=".5"/>
-              <!-- hangar -->
               <path d="M60 205 h64 v46 h-64 z" fill="#20221a" stroke="#f2f3ec" stroke-width="1.4"/>
               <path d="M60 205 l32 -18 l32 18" fill="none" stroke="#c2f24a" stroke-width="1.6"/>
               <path d="M78 251 v-26 h28 v26" fill="none" stroke="#f2f3ec" stroke-width="1" opacity=".5"/>
-              <!-- tower -->
               <path d="M348 250 v-58 M340 192 h16 l-3 -12 h-10 z" stroke="#c2f24a" stroke-width="1.6" fill="none"/>
               <circle cx="348" cy="174" r="3.5" fill="#c2f24a"/>
-              <!-- plane -->
               <g fill="#f2f3ec"><path d="M150 120 l34 7 l-34 7 l5 -7 z"/><path d="M167 120 l-5 -13 l9 11 M167 134 l-5 13 l9 -11"/></g>
             </svg>
             <div class="sel" aria-hidden="true"></div>
           </div>
-          <div class="vp-meta"><h3>Hickam AFB</h3><span class="mono">EDITING · LIVE</span></div>
+          <div class="vp-meta"><h3>USAF Academy</h3><span class="mono">EDITING · LIVE</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="ticker">
+    <span>ENVIRONMENT BUILD <b>/</b></span><span>OPTIMIZATION <b>/</b></span><span>LUAU SCRIPTING <b>/</b></span><span>MILITARY RP <b>/</b></span><span>LEVEL DESIGN <b>/</b></span><span>ROBLOX STUDIO <b>/</b></span>
+    <span>ENVIRONMENT BUILD <b>/</b></span><span>OPTIMIZATION <b>/</b></span><span>LUAU SCRIPTING <b>/</b></span><span>MILITARY RP <b>/</b></span><span>LEVEL DESIGN <b>/</b></span><span>ROBLOX STUDIO <b>/</b></span>
+  </div>
+</div>
+
 <!-- WORK -->
 <section id="work">
   <div class="wrap">
     <div class="s-head reveal">
-      <div class="ix mono">02 · Featured work</div>
+      <div class="ix mono" data-scramble>02 — Featured work</div>
       <h2>The build I'm proudest of</h2>
-      <p>My flagship project, end to end. It's open to play right now.</p>
+      <p>My flagship project, end to end — and it's open to play right now.</p>
     </div>
 
     <article class="feature card reveal d1" data-tilt data-tilt-max="3">
       <div class="visual">
-        <span class="fig mono">FIG.01 — AIRFIELD</span>
-        <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice" aria-label="Flat illustration of the Hickam airbase">
+        <span class="fig mono">FIG.01 — CAMPUS</span>
+        <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice" aria-label="Flat illustration of the Air Force Academy base">
           <rect width="500" height="400" fill="#1b1d16"/>
           <rect y="215" width="500" height="185" fill="#141510"/>
           <circle cx="372" cy="120" r="46" fill="#c2f24a"/>
@@ -402,23 +414,23 @@ footer .c b{color:var(--text-dim);font-weight:500}
         </svg>
       </div>
       <div class="info">
-        <span class="role mono">HEAD DEVELOPER · SINCE 2024</span>
-        <h3>Hickam Air Force Base</h3>
-        <p>I lead the building and development on Hickam: a detailed Air Force base with realistic buildings, runways, hangars, and full base infrastructure, plus military RP systems. Optimized end to end so it holds up on high and low-end devices alike.</p>
+        <span class="role mono">HEAD DEVELOPER · 2024 — PRESENT</span>
+        <h3>United States Air Force Academy</h3>
+        <p>I lead the building and development on the Air Force Academy — a detailed base and campus with realistic buildings, training facilities, and infrastructure, plus military RP systems. Optimized end to end so it holds up on high and low-end devices alike.</p>
         <div class="mini">
           <div><div class="k">Role</div><div class="v">Head Developer</div></div>
-          <div><div class="k">Type</div><div class="v">Military RP</div></div>
+          <div><div class="k">Type</div><div class="v">Academy RP</div></div>
           <div><div class="k">Scope</div><div class="v">Full environment</div></div>
           <div><div class="k">Status</div><div class="v">Live &amp; playable</div></div>
         </div>
         <div class="tags"><span class="tag">Building</span><span class="tag">Optimization</span><span class="tag">Realism</span><span class="tag">Systems</span></div>
-        <a href="https://www.roblox.com/games/15701457046/Hickam-Air-Force-Base" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-mag>Play on Roblox <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 4l14 8-14 8V4z"/></svg></span></a>
+        <a href="https://www.roblox.com/games/97802714567651/United-States-Air-Force-Academy" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-mag data-cursor="play">Play on Roblox <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 4l14 8-14 8V4z"/></svg></span></a>
       </div>
     </article>
 
     <div class="soon reveal d2">
       <span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
-      <div><b>More projects on the way</b><span>Room here for the next builds. This section grows as the portfolio does.</span></div>
+      <div><b>More projects on the way</b><span>Room here for the next builds — this grows as the portfolio does.</span></div>
     </div>
   </div>
 </section>
@@ -427,16 +439,16 @@ footer .c b{color:var(--text-dim);font-weight:500}
 <section id="experience">
   <div class="wrap">
     <div class="s-head reveal">
-      <div class="ix mono">03 · Track record</div>
+      <div class="ix mono" data-scramble>03 — Track record</div>
       <h2>Where I've been building</h2>
       <p>Development work, and the military roleplay community it grew out of.</p>
     </div>
 
     <div class="exp-grid">
       <div class="exp-lead card reveal d1">
-        <span class="when mono"><i></i>SINCE 2024</span>
+        <span class="when mono"><i></i>2024 — PRESENT</span>
         <h3>Head Developer</h3>
-        <div class="sub">Hickam Air Force Base</div>
+        <div class="sub">United States Air Force Academy</div>
         <ul class="duty">
           <li>Lead the full building and development pipeline for the base.</li>
           <li>Build realistic military environments with <strong>close attention to detail</strong>.</li>
@@ -446,10 +458,10 @@ footer .c b{color:var(--text-dim);font-weight:500}
       </div>
 
       <div class="rp-wrap reveal d2">
-        <p class="cap">Military roleplay history (tap to expand)</p>
+        <p class="cap">Military roleplay history — tap to expand</p>
 
         <div class="rp card" aria-expanded="false">
-          <button class="rp-btn" aria-expanded="false" aria-controls="rp1">
+          <button class="rp-btn" aria-expanded="false" aria-controls="rp1" data-cursor="open">
             <span class="idx">01</span><span class="name">Zanance's USAR</span>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
           </button>
@@ -460,12 +472,12 @@ footer .c b{color:var(--text-dim);font-weight:500}
         </div>
 
         <div class="rp card" aria-expanded="false">
-          <button class="rp-btn" aria-expanded="false" aria-controls="rp2">
+          <button class="rp-btn" aria-expanded="false" aria-controls="rp2" data-cursor="open">
             <span class="idx">02</span><span class="name">United States Air Force</span>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
           </button>
           <div class="rp-panel" id="rp2" role="region"><div class="inner"><ul>
-            <li><b><em>VCSAF</em></b>Vice Chief of Staff, second in command of the entire Air Force.</li>
+            <li><b><em>VCSAF</em></b>Vice Chief of Staff — second in command of the entire Air Force.</li>
             <li><b>ACC <em>DCOMM</em></b>Deputy Commander for Air Combat Command.</li>
             <li><b>ACC 94th <em>SXO</em></b>Squadron Executive Officer for the 94th.</li>
           </ul></div></div>
@@ -479,9 +491,9 @@ footer .c b{color:var(--text-dim);font-weight:500}
 <section id="skills">
   <div class="wrap">
     <div class="s-head reveal">
-      <div class="ix mono">04 · Toolkit</div>
+      <div class="ix mono" data-scramble>04 — Toolkit</div>
       <h2>What I bring to a build</h2>
-      <p>Four areas, rated honestly. Some sharp, some still climbing.</p>
+      <p>Four areas, rated honestly — some sharp, some still climbing.</p>
     </div>
 
     <div class="skills">
@@ -490,7 +502,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg></span>
           <h3>Building</h3><span class="lvl">ADVANCED</span>
         </div>
-        <p>Realistic military structures and detailed environments in Roblox Studio. My strongest area by a distance.</p>
+        <p>Realistic military structures and detailed environments in Roblox Studio — my strongest area by a distance.</p>
         <div class="gauge" data-level="9" aria-hidden="true"></div>
       </div>
 
@@ -499,7 +511,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg></span>
           <h3>Scripting</h3><span class="lvl">PROFICIENT</span>
         </div>
-        <p>Comfortable in Luau for game mechanics and interactivity. Solid with the Kronos system, between intermediate and expert.</p>
+        <p>Comfortable in Luau for game mechanics and interactivity. Solid with the Kronos system — between intermediate and expert.</p>
         <div class="gauge" data-level="6" aria-hidden="true"></div>
       </div>
 
@@ -517,7 +529,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v14"/></svg></span>
           <h3>Animation</h3><span class="lvl">DEVELOPING</span>
         </div>
-        <p>Getting stronger with player and environment animation. Still actively learning it.</p>
+        <p>Getting stronger with player and environment animation — an area I'm actively learning right now.</p>
         <div class="gauge" data-level="4" aria-hidden="true"></div>
       </div>
     </div>
@@ -528,19 +540,19 @@ footer .c b{color:var(--text-dim);font-weight:500}
 <section id="contact">
   <div class="wrap">
     <div class="s-head reveal">
-      <div class="ix mono">05 · Available for work</div>
+      <div class="ix mono" data-scramble>05 — Available for work</div>
       <h2>Let's build something</h2>
-      <p>Open to projects or just a conversation. Reach me here.</p>
+      <p>Open to projects or just a conversation — reach me here.</p>
     </div>
 
     <div class="comms">
-      <a href="https://discord.com/users/1167790919702032434" target="_blank" rel="noopener noreferrer" class="comm card reveal d1">
+      <a href="https://discord.com/users/1167790919702032434" target="_blank" rel="noopener noreferrer" class="comm card reveal d1" data-tilt data-tilt-max="4" data-mag data-cursor="open">
         <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.3 5.4A17 17 0 0 0 15 4l-.2.4a13 13 0 0 1 3.7 1.2 12.6 12.6 0 0 0-11 0A13 13 0 0 1 11.2 4.4L11 4a17 17 0 0 0-4.3 1.4C4 9.3 3.3 13 3.6 16.7A17 17 0 0 0 8.8 19l.6-1a11 11 0 0 1-1.8-.9l.4-.3a9 9 0 0 0 8 0l.4.3a11 11 0 0 1-1.8.9l.6 1a17 17 0 0 0 5.2-2.3c.4-4.3-.6-8-2.9-11.3zM9.5 14.4c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.7 1.7-1.5 1.7zm5 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.7 1.7-1.5 1.7z"/></svg></span>
         <div class="t"><small>Discord</small><b>nightravenytalt</b><span>Fastest way to reach me</span></div>
         <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span>
       </a>
 
-      <a href="https://www.roblox.com/users/profile?username=boetson120fps" target="_blank" rel="noopener noreferrer" class="comm card reveal d2">
+      <a href="https://www.roblox.com/users/profile?username=boetson120fps" target="_blank" rel="noopener noreferrer" class="comm card reveal d2" data-tilt data-tilt-max="4" data-mag data-cursor="open">
         <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.2 2 2 18.1 17.8 22 22 5.9 6.2 2Zm6.9 12.3-3.9-1 1-3.8 3.9 1-1 3.8Z"/></svg></span>
         <div class="t"><small>Roblox</small><b>@boetson120fps</b><span>Profile &amp; games</span></div>
         <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span>
@@ -548,7 +560,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
     </div>
 
     <div class="cta-band reveal d3">
-      <a href="https://discord.com/users/1167790919702032434" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-mag>Start a conversation <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a href="https://discord.com/users/1167790919702032434" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-mag data-cursor="say hi">Start a conversation <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
   </div>
 </section>
@@ -572,7 +584,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
   var reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
   var lerp = function(a,b,n){return a+(b-a)*n;};
 
-  /* ---- Mobile menu ---- */
+  /* Mobile menu */
   var burger=document.getElementById('burger'),overlay=document.getElementById('overlay');
   function setMenu(open){
     overlay.classList.toggle('open',open);
@@ -588,7 +600,7 @@ footer .c b{color:var(--text-dim);font-weight:500}
   overlay.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false);});
 
-  /* ---- Accordion ---- */
+  /* Accordion */
   document.querySelectorAll('.rp-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
       var rp=btn.closest('.rp'),open=rp.getAttribute('aria-expanded')==='true';
@@ -597,84 +609,111 @@ footer .c b{color:var(--text-dim);font-weight:500}
     });
   });
 
-  /* ---- Gauges ---- */
+  /* Gauges */
   document.querySelectorAll('.gauge').forEach(function(g){
     var lvl=parseInt(g.getAttribute('data-level'),10)||0;
     for(var i=0;i<10;i++){var s=document.createElement('i');if(i<lvl)s.className='on';g.appendChild(s);}
   });
 
-  /* ---- Reveal + active nav (IntersectionObserver) ---- */
-  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  /* Reveal + active nav + scramble-on-enter */
+  function scramble(el){
+    if(reduced||el.__done)return; el.__done=true;
+    var final=el.textContent, chars='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789/·—';
+    var start=performance.now(), dur=650;
+    (function f(now){
+      var p=Math.min(1,(now-start)/dur), reveal=Math.floor(p*final.length), s='';
+      for(var i=0;i<final.length;i++){ s += (i<reveal||final[i]===' ') ? final[i] : chars[(Math.random()*chars.length)|0]; }
+      el.textContent=s; if(p<1)requestAnimationFrame(f); else el.textContent=final;
+    })(start);
+  }
+  var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){
+    e.target.classList.add('in');
+    var sc=e.target.querySelector&&e.target.querySelector('[data-scramble]'); if(sc)scramble(sc);
+    io.unobserve(e.target);
+  }});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
   var links=[].slice.call(document.querySelectorAll('.nav-links a'));
   var spy=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){var id=e.target.id;links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+id);});}});},{rootMargin:'-45% 0px -50% 0px'});
   document.querySelectorAll('main section').forEach(function(s){spy.observe(s);});
 
-  /* ---- Scroll progress ---- */
-  var prog=document.getElementById('progress'),pTick=false;
-  function pset(){var h=document.documentElement.scrollHeight-innerHeight;var p=h>0?scrollY/h:0;prog.style.transform='scaleX('+p+')';pTick=false;}
+  /* Scroll progress + reader-paced ticker (moves only as you scroll) */
+  var prog=document.getElementById('progress'),tk=document.getElementById('ticker'),pTick=false;
+  function pset(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    prog.style.transform='scaleX('+(h>0?scrollY/h:0)+')';
+    if(tk){var half=tk.scrollWidth/2||1;tk.style.transform='translateX('+(-((scrollY*.35)%half))+'px)';}
+    pTick=false;
+  }
   addEventListener('scroll',function(){if(!pTick){requestAnimationFrame(pset);pTick=true;}},{passive:true});pset();
 
-  if(!fine||reduced){
-    // Still allow non-pointer devices to read everything; skip pointer flourishes.
-    return;
+  /* Live coordinate readout (build-mode flavour) */
+  var coord=document.getElementById('coord');
+  if(coord&&!reduced){
+    setInterval(function(){
+      var x=96+((Math.random()*80)|0), z=32+((Math.random()*80)|0), y=(Math.random()*6)|0;
+      coord.textContent='x '+x+' · y '+y+' · z '+z;
+    },1400);
   }
+
+  /* Ripple on primary buttons */
+  document.querySelectorAll('.btn-primary').forEach(function(b){
+    b.addEventListener('click',function(e){
+      var r=document.createElement('span'),rect=b.getBoundingClientRect(),d=Math.max(rect.width,rect.height);
+      r.className='ripple';r.style.width=r.style.height=d+'px';
+      r.style.left=(e.clientX-rect.left-d/2)+'px';r.style.top=(e.clientY-rect.top-d/2)+'px';
+      b.appendChild(r);setTimeout(function(){r.remove();},620);
+    });
+  });
+
+  if(!fine) return;   // pointer flourishes: desktop mice only
   document.body.classList.add('cursor-on');
 
-  /* ---- Custom cursor (lerped ring) ---- */
-  var ring=document.getElementById('cRing'),dot=document.getElementById('cDot');
-  var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my,rs=1,rsT=1;
-  addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';});
-  (function loop(){rx=lerp(rx,mx,.2);ry=lerp(ry,my,.2);rs=lerp(rs,rsT,.2);
-    ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%) scale('+rs+')';requestAnimationFrame(loop);})();
+  /* Custom cursor — dot + trailing ring with contextual label */
+  var ring=document.getElementById('cRing'),dot=document.getElementById('cDot'),lbl=document.getElementById('cLbl');
+  var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my,scale=1,tScale=1;
+  addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+mx+'px,'+my+'px)';});
+  var k = reduced ? 1 : .2;
+  (function loop(){rx=lerp(rx,mx,k);ry=lerp(ry,my,k);scale=lerp(scale,tScale,.3);
+    ring.style.transform='translate('+rx+'px,'+ry+'px) scale('+scale+')';requestAnimationFrame(loop);})();
   document.querySelectorAll('a,button,[data-tilt],[data-drag],[data-mag]').forEach(function(el){
-    el.addEventListener('mouseenter',function(){ring.classList.add('lg');rsT=1.5;});
-    el.addEventListener('mouseleave',function(){ring.classList.remove('lg');rsT=1;});
+    var text=el.getAttribute('data-cursor');
+    el.addEventListener('mouseenter',function(){ if(text){lbl.textContent=text;ring.classList.add('label');tScale=2.1;} else {tScale=1.7;} });
+    el.addEventListener('mouseleave',function(){ ring.classList.remove('label');tScale=1; });
   });
 
-  /* ---- Grid parallax ---- */
-  var grid=document.getElementById('gridBg');
-  addEventListener('mousemove',function(e){
-    var dx=(e.clientX/innerWidth-.5),dy=(e.clientY/innerHeight-.5);
-    grid.style.transform='translate('+(dx*-18)+'px,'+(dy*-18)+'px)';
-  });
+  if(!reduced){
+    /* Grid parallax */
+    var grid=document.getElementById('gridBg');
+    addEventListener('mousemove',function(e){grid.style.transform='translate('+((e.clientX/innerWidth-.5)*-18)+'px,'+((e.clientY/innerHeight-.5)*-18)+'px)';});
+  }
 
-  /* ---- Tilt cards ---- */
+  /* Tilt cards */
   document.querySelectorAll('[data-tilt]').forEach(function(el){
     var max=parseFloat(el.getAttribute('data-tilt-max'))||7;
     el.addEventListener('mousemove',function(e){
-      var r=el.getBoundingClientRect();
-      var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
-      el.style.transform='rotateY('+(px*max)+'deg) rotateX('+(-py*max)+'deg) translateY(-4px)';
+      var r=el.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+      el.style.transform='perspective(900px) rotateY('+(px*max)+'deg) rotateX('+(-py*max)+'deg) translateY(-4px)';
     });
     el.addEventListener('mouseleave',function(){el.style.transform='';});
   });
 
-  /* ---- Magnetic buttons ---- */
+  /* Magnetic buttons */
   document.querySelectorAll('[data-mag]').forEach(function(el){
+    if(el.hasAttribute('data-tilt'))return;   // avoid transform conflict on tilt+mag elements
     el.addEventListener('mousemove',function(e){
-      var r=el.getBoundingClientRect();
-      var x=(e.clientX-r.left-r.width/2)*.3, y=(e.clientY-r.top-r.height/2)*.4;
+      var r=el.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.3,y=(e.clientY-r.top-r.height/2)*.4;
       el.style.transform='translate('+x+'px,'+y+'px)';
     });
     el.addEventListener('mouseleave',function(){el.style.transform='';});
   });
 
-  /* ---- Draggable hero chips (toss + spring back) ---- */
+  /* Draggable hero chips (toss + spring back) */
   document.querySelectorAll('[data-drag]').forEach(function(chip){
     var on=false,ox,oy;
-    chip.addEventListener('pointerdown',function(e){
-      on=true;ox=e.clientX;oy=e.clientY;chip.setPointerCapture(e.pointerId);
-      chip.classList.add('grab');chip.style.transition='none';chip.style.zIndex=20;
-    });
-    chip.addEventListener('pointermove',function(e){
-      if(!on)return;chip.style.transform='translate('+(e.clientX-ox)+'px,'+(e.clientY-oy)+'px)';
-    });
-    function end(){
-      if(!on)return;on=false;chip.classList.remove('grab');
-      chip.style.transition='transform .7s cubic-bezier(.22,1,.36,1)';chip.style.transform='';
-      setTimeout(function(){chip.style.transition='';chip.style.zIndex='';},800);
-    }
+    chip.addEventListener('pointerdown',function(e){on=true;ox=e.clientX;oy=e.clientY;try{chip.setPointerCapture(e.pointerId);}catch(_){}chip.classList.add('grab');chip.style.transition='none';chip.style.zIndex=20;});
+    chip.addEventListener('pointermove',function(e){if(!on)return;chip.style.transform='translate('+(e.clientX-ox)+'px,'+(e.clientY-oy)+'px)';});
+    function end(){if(!on)return;on=false;chip.classList.remove('grab');chip.style.transition='transform .7s cubic-bezier(.16,1,.3,1)';chip.style.transform='';setTimeout(function(){chip.style.transition='';chip.style.zIndex='';},700);}
     chip.addEventListener('pointerup',end);chip.addEventListener('pointercancel',end);
   });
 })();
